@@ -53,13 +53,14 @@ TOOL_DEFINITIONS = [
                     "enum": [
                         "veneer_closeup_after",
                         "veneer_process_wax",
-                        "veneer_before_after_1",
-                        "veneer_full_smile_after",
-                        "veneer_before_after_2",
-                        "veneer_full_arch_after",
-                        "financing_options"
+                        "veneer_side_profile",
+                        "veneer_side_angles",
+                        "veneer_full_smile",
+                        "veneer_full_arch",
+                        "veneer_before_after",
+                        "veneer_arch_final"
                     ],
-                    "description": "Which image to send. veneer_before_after_1 and veneer_before_after_2 show dramatic before/after transformations. veneer_closeup_after, veneer_full_smile_after, veneer_full_arch_after show beautiful final results. veneer_process_wax shows the wax model + temporary stage. financing_options shows payment plan details."
+                    "description": "Which image to send. Use veneer_before_after for dramatic before/after transformation. Use veneer_full_smile or veneer_closeup_after for beautiful final results. Use veneer_process_wax or veneer_side_profile to show the process. Send 2-3 images when a user asks to see results."
                 }
             },
             "required": ["image_key"]
@@ -93,20 +94,14 @@ TOOL_DEFINITIONS = [
 #       3. Copy each URL and paste below
 
 IMAGE_LIBRARY = {
-    # Page 1 — close-up of veneer result (lips + white teeth)
-    "veneer_closeup_after":    "UPLOAD_TO_CLOUDINARY_veneer_photo_1.jpg",
-    # Page 2 — wax model + side view of temporaries
-    "veneer_process_wax":      "UPLOAD_TO_CLOUDINARY_veneer_photo_2.jpg",
-    # Page 3 — two side-view angles + full smile result
-    "veneer_before_after_1":   "UPLOAD_TO_CLOUDINARY_veneer_photo_3.jpg",
-    # Page 4 — full upper+lower arch smile result
-    "veneer_full_smile_after": "UPLOAD_TO_CLOUDINARY_veneer_photo_4.jpg",
-    # Page 5 — dramatic before/after (stacked, same patient)
-    "veneer_before_after_2":   "UPLOAD_TO_CLOUDINARY_veneer_photo_5.jpg",
-    # Page 6 — clean full arch final result
-    "veneer_full_arch_after":  "UPLOAD_TO_CLOUDINARY_veneer_photo_6.jpg",
-    # Financing graphic — add your own (can be a simple flyer or screenshot)
-    "financing_options":       "UPLOAD_TO_CLOUDINARY_financing.jpg",
+    "veneer_closeup_after":    "https://res.cloudinary.com/dhdianxeq/image/upload/v1774958376/Close-up_lips_white_veneers_mi3er3.jpg",
+    "veneer_process_wax":      "https://res.cloudinary.com/dhdianxeq/image/upload/v1774958462/Wax_model_on_black_background_ocz5bn.jpg",
+    "veneer_side_profile":     "https://res.cloudinary.com/dhdianxeq/image/upload/v1774958469/Side_profile_temporaries_i0d6e5.jpg",
+    "veneer_side_angles":      "https://res.cloudinary.com/dhdianxeq/image/upload/v1774958479/Wax_Two_side-angle_shots_rlhlrn.jpg",
+    "veneer_full_smile":       "https://res.cloudinary.com/dhdianxeq/image/upload/v1774958498/Full_smile_red_lips_cpccg4.jpg",
+    "veneer_full_arch":        "https://res.cloudinary.com/dhdianxeq/image/upload/v1774958504/Full_upper_lower_arch_smile_cmy4rq.jpg",
+    "veneer_before_after":     "https://res.cloudinary.com/dhdianxeq/image/upload/v1774958511/Before_and_after_Smiles_bb5lo9.jpg",
+    "veneer_arch_final":       "https://res.cloudinary.com/dhdianxeq/image/upload/v1774958517/Clean_full_arch_final_g9mogu.jpg",
 }
 
 # ── Tool implementations ──────────────────────────────────────────────────────
