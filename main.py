@@ -12,9 +12,9 @@ To test:
 """
 
 import random
-import time
 import asyncio
 from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 from agent import get_reply
 
@@ -54,6 +54,96 @@ def calculate_delay(reply_text: str) -> float:
 @app.get("/")
 def health_check():
     return {"status": "Smile Crafters agent is running"}
+
+
+@app.get("/demo", response_class=HTMLResponse)
+def demo_chat():
+    return """<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smile Crafters — AI Assistant</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f0f0f0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+    .chat-window { width: 420px; height: 680px; background: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.15); display: flex; flex-direction: column; overflow: hidden; }
+    .chat-header { background: #1a1a2e; color: white; padding: 16px 20px; }
+    .chat-header h2 { font-size: 16px; }
+    .chat-header span { font-size: 12px; color: #aaa; display: block; margin-top: 2px; }
+    .chat-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+    .msg { max-width: 82%; padding: 10px 14px; border-radius: 12px; font-size: 14px; line-height: 1.5; }
+    .msg.user { background: #1a1a2e; color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+    .msg.bot { background: #f1f1f1; color: #222; align-self: flex-start; border-bottom-left-radius: 4px; }
+    .msg.typing { color: #999; font-style: italic; background: #f1f1f1; align-self: flex-start; }
+    .chat-input { display: flex; padding: 12px; border-top: 1px solid #eee; gap: 8px; }
+    .chat-input input { flex: 1; padding: 10px 14px; border: 1px solid #ddd; border-radius: 24px; font-size: 14px; outline: none; }
+    .chat-input button { background: #1a1a2e; color: white; border: none; border-radius: 24px; padding: 10px 18px; cursor: pointer; font-size: 14px; }
+    .chat-input button:disabled { background: #999; cursor: not-allowed; }
+    @media (max-width: 480px) { .chat-window { width: 100%; height: 100vh; border-radius: 0; } }
+  </style>
+</head>
+<body>
+<div class="chat-window">
+  <div class="chat-header">
+    <h2>Smile Crafters</h2>
+    <span>Beverly Hills Premier Dental — AI Assistant</span>
+  </div>
+  <div class="chat-messages" id="messages">
+    <div class="msg bot">Hi there! Welcome to Smile Crafters. How can I help you today?</div>
+  </div>
+  <div class="chat-input">
+    <input type="text" id="userInput" placeholder="Type a message..." onkeydown="if(event.key==='Enter') sendMessage()" />
+    <button id="sendBtn" onclick="sendMessage()">Send</button>
+  </div>
+</div>
+<script>
+  const contactId = "demo_" + Math.random().toString(36).substr(2, 9);
+
+  async function sendMessage() {
+    const input = document.getElementById("userInput");
+    const btn = document.getElementById("sendBtn");
+    const text = input.value.trim();
+    if (!text) return;
+
+    addMessage(text, "user");
+    input.value = "";
+    btn.disabled = true;
+
+    const typingEl = addMessage("Typing...", "typing");
+
+    try {
+      const res = await fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contact_id: contactId, message: text, platform: "demo" })
+      });
+      const data = await res.json();
+      const delay = Math.min((data.delay_seconds || 2) * 1000, 8000);
+      await new Promise(r => setTimeout(r, delay));
+      typingEl.remove();
+      addMessage(data.reply, "bot");
+    } catch (err) {
+      typingEl.remove();
+      addMessage("Sorry, something went wrong. Please try again.", "bot");
+    }
+
+    btn.disabled = false;
+    input.focus();
+  }
+
+  function addMessage(text, type) {
+    const el = document.createElement("div");
+    el.className = "msg " + type;
+    el.textContent = text;
+    const container = document.getElementById("messages");
+    container.appendChild(el);
+    container.scrollTop = container.scrollHeight;
+    return el;
+  }
+</script>
+</body>
+</html>"""
 
 
 @app.post("/chat", response_model=ChatResponse)
