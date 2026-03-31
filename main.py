@@ -123,6 +123,11 @@ def demo_chat():
       await new Promise(r => setTimeout(r, delay));
       typingEl.remove();
       addMessage(data.reply, "bot");
+      if (data.images && data.images.length > 0) {
+        for (const url of data.images) {
+          addImage(url);
+        }
+      }
     } catch (err) {
       typingEl.remove();
       addMessage("Sorry, something went wrong. Please try again.", "bot");
@@ -140,6 +145,18 @@ def demo_chat():
     container.appendChild(el);
     container.scrollTop = container.scrollHeight;
     return el;
+  }
+
+  function addImage(url) {
+    const container = document.getElementById("messages");
+    const wrap = document.createElement("div");
+    wrap.style = "align-self:flex-start; max-width:82%;";
+    const img = document.createElement("img");
+    img.src = url;
+    img.style = "max-width:100%; border-radius:12px; display:block;";
+    wrap.appendChild(img);
+    container.appendChild(wrap);
+    container.scrollTop = container.scrollHeight;
   }
 </script>
 </body>
